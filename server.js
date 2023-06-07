@@ -13,4 +13,4 @@ const server = app.listen(PORT, () => {
   console.log(`Ready to go ${PORT}`);
 });
 
-module.exports = server
+module.exports = {app,server}

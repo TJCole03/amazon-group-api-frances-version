@@ -36,7 +36,7 @@ exports.loginUser = async (req, res) => {
     } else {
       const token = await user.generateAuthToken();
   
-      res.json({ user, token });
+      res.json({ user, token,message:`login sucessful! Welcome, ${user.email}`});
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -49,7 +49,7 @@ exports.updateUser = async (req, res) => {
     const user = await User.findOne({ _id: req.params.id });
     updates.forEach((update) => (user[update] = req.body[update]));
     await user.save();
-    res.json({user});
+    res.json({user, message:`updated user info`});
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -80,7 +80,7 @@ exports.listUsers = async (req, res) => {
   try {
 
    const listUsers = await User.find({});
-  
+   console.log(listUsers)
      res.render('../views/Index', {
        users: listUsers,
      });

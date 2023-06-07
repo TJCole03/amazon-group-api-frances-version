@@ -13,14 +13,11 @@ beforeAll(async () => {
   })
   
   
-  afterAll(async ()=>{
-      await mongoose.connection.close() // programmatic ctrl+c
-      mongoServer.stop() //getting rid of our MongoDB instance itself
-      server.close()
-  })
+
 
 
   describe('Test the user Endpoints', ()=>{
+
     test('It should create a new user', async ()=>{
         const response = await request(app)
         .post('/users')
@@ -45,10 +42,32 @@ beforeAll(async () => {
       })
 
       test('It should return a list of users', async ()=>{
-        const usersList = await User.find({})
-        .get('/users')
-        expect(response.body)
+        const response = await request(app)
+        .get('/')
+        
+        expect(response.body).toMatchObject(response)
+        expect(response.statusCode).toBe(200)
+
+      })
+      test('It should log out a user',async ()=>{
+        const response = await request(app)
+        .post('/users/logout')
+        .send({email:'john.doe@example.com', password:'password123'})
+        expect(response.body.email).toBe('john.doe@example.com')
+        expect(response.body.token).toBe(null)
+        expect(response.body.message).toBe('Logout Sucessful')
+      })
+      test('It should update a user', async ()=>{
+        const response = await request(app)
+      })
+      test('It should delete the user', async ()=>{
 
       })
     
   })
+
+  afterAll(async ()=>{
+    await mongoose.connection.close() // programmatic ctrl+c
+    mongoServer.stop() //getting rid of our MongoDB instance itself
+    server.close()
+})
