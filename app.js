@@ -7,7 +7,7 @@ const app = express();
 app.set('view engine','jsx')
 app.engine('jsx',jsxEngine())
 
-app.use(express.static('public'));
+app.use(express.static('public/css'));
 app.use(express.json());
 app.use(morgan('combined'));
 app.use('/users', userRoutes);
