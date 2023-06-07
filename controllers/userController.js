@@ -35,6 +35,7 @@ exports.loginUser = async (req, res) => {
       res.status(400).send('Invalid login credentials');
     } else {
       const token = await user.generateAuthToken();
+  
       res.json({ user, token });
     }
   } catch (error) {
@@ -48,7 +49,7 @@ exports.updateUser = async (req, res) => {
     const user = await User.findOne({ _id: req.params.id });
     updates.forEach((update) => (user[update] = req.body[update]));
     await user.save();
-    res.json(user);
+    res.json({user});
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -65,10 +66,11 @@ exports.deleteUser = async (req, res) => {
 
 exports.logoutUser = async (req, res, next) => {
   try {
-    res.redirect('/');
+    const user  =  req.body.email
     const token = null;
-    res.json({ user, token });
-    res.status(200).send('Logout successful');
+    res.json({ user, token,message:'Logout Sucessful'} );
+    res.redirect('/');
+    
   } catch (error) {
     res.status(421).json({ message: error.message });
   }
@@ -76,11 +78,15 @@ exports.logoutUser = async (req, res, next) => {
 
 exports.listUsers = async (req, res) => {
   try {
-    const listUsers = await User.find({});
-    res.render('/Index', {
-      users: listUsers,
-    });
-  } catch (error) {
+
+   const listUsers = await User.find({});
+  
+     res.render('../views/Index', {
+       users: listUsers,
+     });
+    
+  }
+   catch (error) {
     res.status(421).json({ message: error.message });
   }
 };
