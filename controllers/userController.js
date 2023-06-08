@@ -31,6 +31,7 @@ exports.createUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
+    console.log(user)
     if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
       res.status(400).send('Invalid login credentials');
     } else {

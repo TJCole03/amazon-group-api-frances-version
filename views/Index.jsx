@@ -10,7 +10,8 @@ function Index(props){
                         return(
                             <li key={user._id}>
                                 <a href={`/users/${user._id}`}>{user.
-                                name} is {user.email}</a>
+                                name} has an email: {user.email}
+                                and their hashed password is {user.password}</a>
                             </li>
                         )
                     })
