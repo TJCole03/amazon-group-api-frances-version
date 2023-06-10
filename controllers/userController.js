@@ -44,33 +44,38 @@ exports.loginUser = async (req, res) => {
   }
 };
 
+
 exports.updateUser = async (req, res) => {
   try {
     const updates = Object.keys(req.body);
     const user = await User.findOne({ _id: req.params.id });
     updates.forEach((update) => (user[update] = req.body[update]));
     await user.save();
-    res.json({user, message:`updated user info`});
+    res.json({user, message: 'updated user info'});
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
+
 exports.deleteUser = async (req, res) => {
   try {
-    await req.user.deleteOne();
+    const user = await User.findOne({ _id: req.params.id })
+    user.deleteOne()
+
     res.json({ message: 'User Deleted' });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
+
+
 exports.logoutUser = async (req, res, next) => {
   try {
-    const user  =  req.body.email
-    const token = null;
-    res.json({ user, token,message:'Logout Sucessful'} );
-    res.redirect('/');
+    const user  =  await User(req.body.id)
+    res.json({ user, message:'Logout Successful'} );
+    //res.redirect('/'); //WE CAN ONLY CALL ONE RES. METHOD ONCE PER FUNCTION
     
   } catch (error) {
     res.status(421).json({ message: error.message });
@@ -82,7 +87,7 @@ exports.listUsers = async (req, res) => {
 
    const listUsers = await User.find({});
    console.log(listUsers)
-     res.render('../views/Index', {
+     res.json({
        users: listUsers,
      });
     
